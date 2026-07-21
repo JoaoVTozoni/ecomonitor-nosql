@@ -171,11 +171,26 @@ ecomonitor-nosql/
 
 ---
 
-## 📅 Entrega 5 — Redis e Grafos com Neo4j
+Além dos scripts independentes de console (`redis_funcionalidades.py` e `neo4j_ecomonitor.py`), integramos todas as funcionalidades de Redis e Neo4j diretamente na interface Streamlit, fornecendo um painel consolidado:
 
-Foram adicionados dois scripts independentes, seguindo a mesma estrutura usada pelo projeto CineHub:
+### Aba "Redis (Entrega 5)" — Sessões e Estruturas Probabilísticas
 
-- `redis_funcionalidades.py`: login e sessão do gestor; cache de alertas; Bloom Filter; HyperLogLog; Redis Stream; ranking com ZSET.
-- `neo4j_ecomonitor.py`: cria o grafo `Building → Sector → Event`, relaciona sensores e executa **GDS Degree Centrality** para identificar os setores com mais anomalias.
+![Aba Redis no Streamlit](examples/redis_tab.png)
 
-O passo a passo completo está em [`docs/entrega_redis_neo4j.md`](docs/entrega_redis_neo4j.md).
+Esta tela é responsável por gerenciar e visualizar as operações no Redis Cloud:
+*   **Controle de Sessão (HASH, SET e STRING com TTL):** Simulação interativa do login do gestor. O cadastro do usuário é persistido em `HASH`, e a sessão gera um token temporário `STRING` com TTL (tempo de expiração monitorado em tempo real na tela), além de rastrear os tokens ativos em um `SET`.
+*   **Filtro e Deduplicação (Bloom Filter / Fallback SET):** O botão de processamento puxa os alertas pendentes do MongoDB e executa a deduplicação usando Bloom Filter (`BF.EXISTS`/`BF.ADD`). O sistema impede que o mesmo evento seja enfileirado duas vezes.
+*   **Mensageria e Fila (STREAM):** Lista as últimas notificações ativas na fila persistente `ecomonitor:stream:alertas`.
+*   **Estatísticas (HyperLogLog & ZSET):** Exibe a estimativa probabilística de setores únicos com anomalias usando HLL e renderiza um leaderboard de setores críticos em tempo real usando Sorted Set (ZSET).
+
+### Aba "Neo4j (Entrega 5)" — Análise de Grafos e Degree Centrality (GDS)
+
+![Aba Neo4j no Streamlit](examples/neo4j_tab.png)
+
+Mapeia a arquitetura física e lógica do EcoMonitor em nós e relacionamentos:
+*   **Nós e Conexões:** Representa o relacionamento `(Building)-[:POSSUI]->(Sector)-[:GEROU]->(Event)` e `(Sector)-[:MONITORADO_POR]->(Sensor)`.
+*   **Sincronização Unificada:** Permite acionar a recriação e carga completa do grafo a partir dos dados do MongoDB Atlas com um único clique.
+*   **Centralidade de Criticidade (GDS):** Executa o algoritmo GDS **Degree Centrality** para calcular quais setores geraram o maior volume de anomalias (grau de conexões `[:GEROU]`). O painel ordena e destaca visualmente os setores que exigem manutenção prioritária.
+
+O passo a passo detalhado está documentado em [`docs/entrega_redis_neo4j.md`](docs/entrega_redis_neo4j.md).
+
