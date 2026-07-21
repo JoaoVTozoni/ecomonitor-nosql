@@ -171,11 +171,15 @@ ecomonitor-nosql/
 
 ---
 
-Além dos scripts independentes de console (`redis_funcionalidades.py` e `neo4j_ecomonitor.py`), integramos todas as funcionalidades de Redis e Neo4j diretamente na interface Streamlit, fornecendo um painel consolidado:
+Além dos scripts independentes de console (`redis_funcionalidades.py` e `neo4j_ecomonitor.py`), integramos todas as funcionalidades de Redis e Neo4j diretamente na interface Streamlit, fornecendo um painel consolidado com indicadores de status:
+
+![Painel de Controle com Status das Conexões](examples/Captura%20de%20tela%202026-07-21%20180028.png)
 
 ### Aba "Redis (Entrega 5)" — Sessões e Estruturas Probabilísticas
 
-![Aba Redis no Streamlit](examples/redis_tab.png)
+![Controle de Sessão e Processamento de Alertas no Redis](examples/Captura%20de%20tela%202026-07-21%20180057.png)
+
+![Fila de Alertas Stream e Leaderboard ZSET](examples/Captura%20de%20tela%202026-07-21%20180143.png)
 
 Esta tela é responsável por gerenciar e visualizar as operações no Redis Cloud:
 *   **Controle de Sessão (HASH, SET e STRING com TTL):** Simulação interativa do login do gestor. O cadastro do usuário é persistido em `HASH`, e a sessão gera um token temporário `STRING` com TTL (tempo de expiração monitorado em tempo real na tela), além de rastrear os tokens ativos em um `SET`.
@@ -185,7 +189,9 @@ Esta tela é responsável por gerenciar e visualizar as operações no Redis Clo
 
 ### Aba "Neo4j (Entrega 5)" — Análise de Grafos e Degree Centrality (GDS)
 
-![Aba Neo4j no Streamlit](examples/neo4j_tab.png)
+![Sincronização e Resumo do Grafo Neo4j](examples/Captura%20de%20tela%202026-07-21%20180231.png)
+
+![Cálculo de Centralidade GDS dos Setores](examples/Captura%20de%20tela%202026-07-21%20180306.png)
 
 Mapeia a arquitetura física e lógica do EcoMonitor em nós e relacionamentos:
 *   **Nós e Conexões:** Representa o relacionamento `(Building)-[:POSSUI]->(Sector)-[:GEROU]->(Event)` e `(Sector)-[:MONITORADO_POR]->(Sensor)`.
