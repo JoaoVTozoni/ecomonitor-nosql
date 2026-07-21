@@ -1,0 +1,5 @@
+pymongo==4.8.0
+streamlit==1.38.0
+python-dotenv==1.0.1
+redis==5.0.8
+neo4j==5.23.1

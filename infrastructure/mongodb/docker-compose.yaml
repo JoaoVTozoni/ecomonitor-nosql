@@ -1,0 +1,22 @@
+version: "3.8"
+
+# O que este arquivo faz:
+# Sobe um container com o MongoDB rodando localmente, na porta padrão 27017,
+# já com usuário e senha configurados. Não precisa instalar o MongoDB
+# manualmente no sistema — o Docker cuida disso de forma isolada.
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: ecomonitor_mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ecomonitor
+      MONGO_INITDB_ROOT_PASSWORD: ecomonitor123
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
